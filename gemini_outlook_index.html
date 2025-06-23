@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Outlook Assistant</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0078d4;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #323130;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #106ebe;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .template-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .template-btn {
+            background-color: #f3f2f1;
+            color: #323130;
+            border: 1px solid #d1d1d1;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .template-btn:hover {
+            background-color: #e1dfdd;
+        }
+        .results {
+            background-color: #f8f9fa;
+            border: 1px solid #e1e5e9;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .copy-btn {
+            background-color: #107c10;
+            margin-top: 10px;
+            width: auto;
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+        .copy-btn:hover {
+            background-color: #0e5a0e;
+        }
+        .error {
+            color: #d13438;
+            background-color: #fdf2f2;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Gemini Assistant</h1>
+        
+        <!-- API Key Section -->
+        <div class="section">
+            <label for="apiKey">Gemini API Key:</label>
+            <input type="password" id="apiKey" placeholder="Enter your Gemini API key from AI Studio">
+        </div>
+
+        <!-- Quick Templates -->
+        <div class="section">
+            <label>Quick Actions:</label>
+            <div class="template-buttons">
+                <button class="template-btn" onclick="setTemplate('draft')">✍️ Draft Email</button>
+                <button class="template-btn" onclick="setTemplate('summarize')">📚 Summarize</button>
+                <button class="template-btn" onclick="setTemplate('rephrase')">💬 Rephrase</button>
+                <button class="template-btn" onclick="setTemplate('brainstorm')">🧠 Brainstorm</button>
+                <button class="template-btn" onclick="setTemplate('translate')">🌐 Translate</button>
+                <button class="template-btn" onclick="setTemplate('formal')">🧾 Formal Reply</button>
+            </div>
+        </div>
+
+        <!-- Email Content Input -->
+        <div class="section">
+            <label for="emailContent">Email Content (optional):</label>
+            <textarea id="emailContent" placeholder="Paste email content here for context..."></textarea>
+        </div>
+
+        <!-- Search/Filter -->
+        <div class="section">
+            <label for="searchFilter">Filter by keyword (optional):</label>
+            <input type="text" id="searchFilter" placeholder="e.g., 'deadline', 'budget', 'meeting'">
+        </div>
+
+        <!-- Custom Instruction -->
+        <div class="section">
+            <label for="instruction">Instruction for Gemini:</label>
+            <textarea id="instruction" placeholder="What would you like Gemini to do? e.g., 'Summarize key decisions', 'Draft a polite response'"></textarea>
+        </div>
+
+        <!-- Generate Button -->
+        <button id="generateBtn" onclick="generateResponse()">Generate Response</button>
+
+        <!-- Results -->
+        <div id="results" class="results" style="display: none;"></div>
+        <button id="copyBtn" class="copy-btn" style="display: none;" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+    </div>
+
+    <script src="taskpane.js"></script>
+</body>
+</html>
